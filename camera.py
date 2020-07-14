@@ -16,8 +16,12 @@ class Camera:
         """
         self.point_for_calibration = point_for_calibration
         self.num_points = len(self.point_for_calibration)
+
+        # 校正点が満たす連立1次方程式の行列とベクトル
         self.array = None
         self.vector = None
+        # 透視投影行列
+        self.perspective_projection_matrix = None
 
     # 行列Aとベクトルbを生成
     def __generate_array_and_vector(self):
@@ -25,6 +29,7 @@ class Camera:
             array_ = []
             vector_ = []
             for row in self.point_for_calibration.itertuples():
+                # 画像上の点u, vと3次元座標x, y, zを取得
                 u = row[1]
                 v = row[2]
                 x = row[3]
@@ -52,6 +57,31 @@ class Camera:
     def calibrate(self):
         # 行列Aとベクトルbを生成する
         self.__generate_array_and_vector()
+        # A^T Aを求める
+        try:
+            a_t_a = np.dot(self.array.T, self.array)
+            print("A^T*A")
+            print(a_t_a)
+        except ValueError:
+            print("ValueError A^T*A")
+
+        # A^T bを求める
+        try:
+            a_t_b = np.dot(self.array.T, self.vector)
+            print("A^T*b")
+            print(a_t_b)
+        except ValueError:
+            print("ValueError A^T*b")
+
+        # 連立1次方程式を解く
+        x = np.linalg.solve(a_t_a, a_t_b)
+        print(x)
+
+        # 透視投影行列
+        p = [[x[0], x[1], x[2], x[3]],
+             [x[4], x[5], x[6], x[7]],
+             [x[8], x[9], x[10], 1]]
+        self.perspective_projection_matrix = np.array(p, np.float64)
 
 
 if __name__ == "__main__":
