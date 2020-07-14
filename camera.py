@@ -85,6 +85,6 @@ class Camera:
 
 
 if __name__ == "__main__":
-    points = pd.read_csv("points.csv")
+    points = pd.read_csv("points_1.csv")
     c1 = Camera(points)
     c1.calibrate()
