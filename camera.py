@@ -22,6 +22,7 @@ class Camera:
         self.vector = None
         # 透視投影行列
         self.perspective_projection_matrix = None
+        self.__flatten_p = None
 
     # 行列Aとベクトルbを生成
     def __generate_array_and_vector(self):
@@ -82,6 +83,18 @@ class Camera:
              [x[4], x[5], x[6], x[7]],
              [x[8], x[9], x[10], 1]]
         self.perspective_projection_matrix = np.array(p, np.float64)
+        # 透視投影行列(flatten)
+        self.__flatten_p = x
+
+    # 3D -> 2D
+    def perspective_project(self, x, y, z):
+        # 透視投影行列(flatten)
+        p = self.__flatten_p
+
+        lambda_ = p[8] * x + p[9] * y + p[10] * z + 1.0
+        u = (p[0] * x + p[1] * y + p[2] * z + p[3]) / lambda_
+        v = (p[4] * x + p[5] * y + p[6] * z + p[7]) / lambda_
+        return u, v
 
 
 if __name__ == "__main__":
@@ -89,3 +102,24 @@ if __name__ == "__main__":
     c1 = Camera(points)
     c1.calibrate()
     print(c1.perspective_projection_matrix)
+
+    # 透視投行列が妥当かどうかを確認する
+    points_valid = pd.read_csv("points_1_valid.csv")
+    pred_u = []
+    pred_v = []
+    for row in points_valid.itertuples():
+        u_, v_ = c1.perspective_project(row[3], row[4], row[5])
+        pred_u += [u_]
+        pred_v += [v_]
+
+    predict = pd.DataFrame({"u": pred_u, "v": pred_v,
+                            "x": points_valid["x"],
+                            "y": points_valid["y"],
+                            "z": points_valid["z"]})
+
+    predict["u"] = predict["u"].astype(int)
+    predict["v"] = predict["v"].astype(int)
+
+    from visualize import plot_calibration_points
+    plot_calibration_points("data/1.JPG", "data/1_pred.JPG", points_valid)
+    plot_calibration_points("data/1_pred.JPG", "data/1_pred.JPG", predict, color=(0, 0, 230))
