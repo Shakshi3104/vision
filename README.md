@@ -13,6 +13,11 @@ Origin of the name: Apple Framework [Vision](https://developer.apple.com/documen
 - pandas
 - OpenCV
 
+Install OpenCV under Anaconda
+```bash
+conda install -c conda-forge opencv
+```
+
 ## Usage
 Obtain the perspective projection matrix
 
