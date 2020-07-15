@@ -6,10 +6,10 @@ class Camera:
     def __init__(self, point_for_calibration: pd.DataFrame):
         """
         Camera:
-            Class to calibrate the camera from images.
+            Class to calibrate the camera from the image.
 
         :argument
-            point_for_calibration: DataFrame, pairs of point on images and 3D point, for the calibration.
+            point_for_calibration: DataFrame, pairs of point on the image and 3D point, for the calibration.
             Example:
                 |  u  |  v  |  X  |  Y  |  Z  |
                 | 128 | 324 | 3.0 | 5.0 | 0.0 |
