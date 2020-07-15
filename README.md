@@ -1,14 +1,3 @@
-<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
-<script type="text/x-mathjax-config">
- MathJax.Hub.Config({
- tex2jax: {
- inlineMath: [["\\(","\\)"] ],
- displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
- }
- });
-</script>
-
-
 # 3D Information Processing
 ### Vision
 Codes for the report; `Obtain a 3D shape from images taken by multiple cameras`
@@ -16,7 +5,7 @@ Codes for the report; `Obtain a 3D shape from images taken by multiple cameras`
 Origin of the name: Apple Framework [Vision](https://developer.apple.com/documentation/vision)
 
 ## Obtain a 3D shape from images taken by multiple cameras
-- Obtain the perspective projection matrix $ P $ for each cameras by camera calibration using a checkerboard.
+- Obtain the perspective projection matrix for each cameras by camera calibration using a checkerboard.
 - By using the obtained perspective projection matrix, calculate the 3D coordinates of the point from the 2D coordinates of the corresponding point between each image.
 
 ## Requirement
