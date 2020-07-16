@@ -55,28 +55,38 @@ class Camera:
             self.vector = vector
 
     # カメラの校正
-    def calibrate(self):
+    def calibrate(self, verbose=0):
         # 行列Aとベクトルbを生成する
         self.__generate_array_and_vector()
+        if verbose > 0:
+            print("A = ")
+            print(self.array)
+            print("b = ")
+            print(self.vector)
+
         # A^T Aを求める
         try:
             a_t_a = np.dot(self.array.T, self.array)
-            print("A^T*A")
-            print(a_t_a)
+            if verbose > 0:
+                print("A^T*A = ")
+                print(a_t_a)
         except ValueError:
             print("ValueError A^T*A")
 
         # A^T bを求める
         try:
             a_t_b = np.dot(self.array.T, self.vector)
-            print("A^T*b")
-            print(a_t_b)
+            if verbose > 0:
+                print("A^T*b = ")
+                print(a_t_b)
         except ValueError:
             print("ValueError A^T*b")
 
         # 連立1次方程式を解く
         x = np.linalg.solve(a_t_a, a_t_b)
-        print(x)
+        if verbose > 0:
+            print("x = ")
+            print(x)
 
         # 透視投影行列
         p = [[x[0], x[1], x[2], x[3]],
@@ -85,6 +95,9 @@ class Camera:
         self.perspective_projection_matrix = np.array(p, np.float64)
         # 透視投影行列(flatten)
         self.__flatten_p = x
+
+        print("Perspective Projection Matrix")
+        print(self.perspective_projection_matrix)
 
     # 3D -> 2D
     def perspective_project(self, x, y, z):
@@ -95,6 +108,13 @@ class Camera:
         u = (p[0] * x + p[1] * y + p[2] * z + p[3]) / lambda_
         v = (p[4] * x + p[5] * y + p[6] * z + p[7]) / lambda_
         return u, v
+
+    # sklearn-like
+    def fit(self, verbose=0):
+        self.calibrate(verbose)
+
+    def predict(self, x, y, z):
+        self.predict(x, y, z)
 
 
 if __name__ == "__main__":
