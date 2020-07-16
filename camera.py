@@ -167,4 +167,4 @@ if __name__ == "__main__":
     c1.calibrate()
 
     c1.re_project()
-    print(c1.re_projection_error())
+    print("Re-projection Error = ", c1.re_projection_error())

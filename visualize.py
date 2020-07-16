@@ -36,10 +36,6 @@ def plot_calibration_points(read_image_path: str, write_image_path: str, points:
 
 
 if __name__ == "__main__":
-    # img = cv2.imread("data/1.JPG")
-    # img = plot_calibration_point(img, 512, 512, radius=10)
-    # cv2.imwrite("data/1_plotted.JPG", img)
 
-    points = pd.read_csv("points_3.csv")
-    plot_calibration_points("data/3.JPG", "data/3_plotted.JPG", points)
-
+    points = pd.read_csv("points.csv")
+    plot_calibration_points("sample/IMG_4047.JPG", "sample/IMG_4047_plotted.JPG", points)
