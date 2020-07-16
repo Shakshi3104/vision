@@ -20,7 +20,7 @@ conda install -c conda-forge opencv
 https://anaconda.org/conda-forge/opencv
 
 ## Usage
-Obtain the perspective projection matrix
+#### Obtain the perspective projection matrix
 
 ```python
 import pandas as pd
@@ -29,16 +29,54 @@ from camera import Camera
 points = pd.read_csv('points.csv')
 c = Camera(points)
 c.calibrate()
-print(c.perspective_projection_matrix)
     """
+    Perspective Projection Matrix
     [[-4.01166202e+01  2.69309121e+01 -2.45286091e+01  1.58043293e+03]
      [ 9.16710285e+00  8.81454884e-01 -5.16736803e+01  1.10996705e+03]
      [-1.38215069e-02 -6.82164706e-03 -1.24927871e-02  1.00000000e+00]]
     """
 ```
 
+sklearn-like
+ ```python
+import pandas as pd
+from camera import Camera
 
-Plot calibration points
+points = pd.read_csv('points.csv')
+c = Camera(points)
+c.fit()
+```
+
+##### Format of `points.csv`
+`u` and `v` are points of image
+
+`x`, `y`, and `z` are points of object (checkerboard)
+
+|   u  |   v  |   x  |   y  |  z  |
+|:----:|:----:|:----:|:----:|:---:|
+| 2117 | 1339 |  2.9 | 12.0 | 0.0 |
+| 1593 | 1584 | 11.9 |  6.0 | 0.0 |
+| 2199 | 2059 | 17.9 | 18.0 | 0.0 |
+
+#### Projection
+
+```python
+x, y, z = 0.0, 11.1, 11.8
+u, v = c.prespective_project(x, y, z)
+    """
+    u = 2046.5960184435
+    v = 656.4871372556853
+    """
+```
+
+sklearn-like
+```python
+x, y, z = 0.0, 11.1, 11.8
+u, v = c.fit(x, y, z)
+    
+```
+
+#### Plot calibration points
 ```python
 import pandas as pd
 from visualize import plot_calibration_points

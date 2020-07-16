@@ -121,7 +121,6 @@ if __name__ == "__main__":
     points = pd.read_csv("points_1.csv")
     c1 = Camera(points)
     c1.calibrate()
-    print(c1.perspective_projection_matrix)
 
     # 透視投行列が妥当かどうかを確認する
     points_valid = pd.read_csv("points_1_valid.csv")
