@@ -85,5 +85,4 @@ plot_calibration_points("img.JPG", "img_plotted.JPG", points)
 ```
 
 ##### Example
-![](sample/IMG_4047.JPG)
-![](sample/IMG_4047_plotted.JPG)
+![original](sample/IMG_4047.JPG) ![plotted](sample/IMG_4047_plotted.JPG)
