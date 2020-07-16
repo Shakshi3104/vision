@@ -84,7 +84,8 @@ points = pd.read_csv("points.csv")
 plot_calibration_points("img.JPG", "img_plotted.JPG", points)
 ```
 
-##### Example
+Example
+
 Original | Plotted
 :-------:|:-------:
 ![original](sample/IMG_4047.JPG) | ![plotted](sample/IMG_4047_plotted.JPG)
