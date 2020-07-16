@@ -24,6 +24,9 @@ class Camera:
         self.perspective_projection_matrix = None
         self.__flatten_p = None
 
+        # 再投影点
+        self.points_of_reprojection = None
+
     # 行列Aとベクトルbを生成
     def __generate_array_and_vector(self):
         if self.array is None or self.vector is None:
@@ -56,6 +59,7 @@ class Camera:
 
     # カメラの校正
     def calibrate(self, verbose=0):
+        print("Calibrate camera...")
         # 行列Aとベクトルbを生成する
         self.__generate_array_and_vector()
         if verbose > 0:
@@ -101,6 +105,10 @@ class Camera:
 
     # 3D -> 2D
     def perspective_project(self, x, y, z):
+        if self.__flatten_p is None or self.perspective_projection_matrix is None:
+            print("Not calibrated.")
+            return
+
         # 透視投影行列(flatten)
         p = self.__flatten_p
 
@@ -108,6 +116,42 @@ class Camera:
         u = (p[0] * x + p[1] * y + p[2] * z + p[3]) / lambda_
         v = (p[4] * x + p[5] * y + p[6] * z + p[7]) / lambda_
         return u, v
+
+    # 校正点を再投影する
+    def re_project(self):
+        if self.__flatten_p is None or self.perspective_projection_matrix is None:
+            print("Not calibrated.")
+            return
+
+        reprojected_u = []
+        reprojected_v = []
+        # 再投影する
+        for row in self.point_for_calibration.itertuples():
+            u_, v_ = self.perspective_project(row[3], row[4], row[5])
+            reprojected_u += [u_]
+            reprojected_v += [v_]
+
+        reprojected = pd.DataFrame({"u": reprojected_u,
+                                    "v": reprojected_v,
+                                    "x": self.point_for_calibration["x"],
+                                    "y": self.point_for_calibration["y"],
+                                    "z": self.point_for_calibration["z"]})
+
+        # 画像点をintにキャストする
+        reprojected["u"] = reprojected["u"].astype(int)
+        reprojected["v"] = reprojected["v"].astype(int)
+
+        self.points_of_reprojection = reprojected
+
+    # 再投影誤差
+    def re_projection_error(self):
+        errors = []
+        for row_true, row_pred in zip(self.point_for_calibration.itertuples(), self.points_of_reprojection.itertuples()):
+            # 校正点と投影点の距離を求める
+            error = np.sqrt((row_true[1] - row_pred[1]) ** 2 + (row_true[2] - row_pred[2]) ** 2)
+            errors += [error]
+        
+        return np.average(errors)
 
     # sklearn-like
     def fit(self, verbose=0):
@@ -122,23 +166,5 @@ if __name__ == "__main__":
     c1 = Camera(points)
     c1.calibrate()
 
-    # 透視投行列が妥当かどうかを確認する
-    points_valid = pd.read_csv("points_1_valid.csv")
-    pred_u = []
-    pred_v = []
-    for row in points_valid.itertuples():
-        u_, v_ = c1.perspective_project(row[3], row[4], row[5])
-        pred_u += [u_]
-        pred_v += [v_]
-
-    predict = pd.DataFrame({"u": pred_u, "v": pred_v,
-                            "x": points_valid["x"],
-                            "y": points_valid["y"],
-                            "z": points_valid["z"]})
-
-    predict["u"] = predict["u"].astype(int)
-    predict["v"] = predict["v"].astype(int)
-
-    from visualize import plot_calibration_points
-    plot_calibration_points("data/1.JPG", "data/1_pred.JPG", points_valid)
-    plot_calibration_points("data/1_pred.JPG", "data/1_pred.JPG", predict, color=(0, 0, 230))
+    c1.re_project()
+    print(c1.re_projection_error())
