@@ -116,7 +116,7 @@ import pandas as pd
 from visualize import plot_calibration_points
 
 points = pd.read_csv("points.csv")
-plot_calibration_points("img.JPG", "img_plotted.JPG", points)
+plot_calibration_points("sample/IMG_4047.JPG", "sample/IMG_4047_plotted.JPG", points)
 ```
 
 Example
