@@ -30,6 +30,7 @@ points = pd.read_csv('points.csv')
 c = Camera(points)
 c.calibrate()
     """
+    Calibrate camera...
     Perspective Projection Matrix
     [[-4.01166202e+01  2.69309121e+01 -2.45286091e+01  1.58043293e+03]
      [ 9.16710285e+00  8.81454884e-01 -5.16736803e+01  1.10996705e+03]

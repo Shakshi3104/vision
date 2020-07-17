@@ -19,7 +19,8 @@ def plot_calibration_point(image, u, v, point_id="0", radius=10, color=(0, 188, 
             img = cv2.putText(img, point_id, (u - 80 - textsize[1], v), cv2.FONT_HERSHEY_SIMPLEX, 5, color, 5)
         else:
             # 左下にプロット
-            img = cv2.putText(img, point_id, (u - 80 - textsize[1], v + textsize[0] - 30), cv2.FONT_HERSHEY_SIMPLEX, 5, color, 5)
+            img = cv2.putText(img, point_id, (u - 80 - textsize[1], v + textsize[0] - 30), cv2.FONT_HERSHEY_SIMPLEX, 5,
+                              color, 5)
 
     else:
         # 基本的には点の右上に数字をプロット
@@ -27,7 +28,8 @@ def plot_calibration_point(image, u, v, point_id="0", radius=10, color=(0, 188, 
     return img
 
 
-def plot_calibration_points(read_image_path: str, write_image_path: str, points: pd.DataFrame, radius=10, color=(0, 188, 255)):
+def plot_calibration_points(read_image_path: str, write_image_path: str, points: pd.DataFrame, radius=10,
+                            color=(0, 188, 255)):
     img = cv2.imread(read_image_path)
     for row in points.itertuples():
         img = plot_calibration_point(img, row[1], row[2], str(row[0] + 1), radius, color)
@@ -36,6 +38,6 @@ def plot_calibration_points(read_image_path: str, write_image_path: str, points:
 
 
 if __name__ == "__main__":
-
     points = pd.read_csv("points.csv")
     plot_calibration_points("sample/IMG_4047.JPG", "sample/IMG_4047_plotted.JPG", points)
+

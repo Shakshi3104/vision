@@ -3,7 +3,7 @@ import pandas as pd
 
 
 class Camera:
-    def __init__(self, point_for_calibration: pd.DataFrame):
+    def __init__(self, points_for_calibration: pd.DataFrame):
         """
         Camera:
             Class to calibrate the camera from the image.
@@ -14,8 +14,8 @@ class Camera:
                 |  u  |  v  |  X  |  Y  |  Z  |
                 | 128 | 324 | 3.0 | 5.0 | 0.0 |
         """
-        self.point_for_calibration = point_for_calibration
-        self.num_points = len(self.point_for_calibration)
+        self.points_for_calibration = points_for_calibration
+        self.num_points = len(self.points_for_calibration)
 
         # 校正点が満たす連立1次方程式の行列とベクトル
         self.array = None
@@ -32,7 +32,7 @@ class Camera:
         if self.array is None or self.vector is None:
             array_ = []
             vector_ = []
-            for row in self.point_for_calibration.itertuples():
+            for row in self.points_for_calibration.itertuples():
                 # 画像上の点u, vと3次元座標x, y, zを取得
                 u = row[1]
                 v = row[2]
@@ -117,6 +117,25 @@ class Camera:
         v = (p[4] * x + p[5] * y + p[6] * z + p[7]) / lambda_
         return u, v
 
+    # 3D points -> 2D points
+    def perspective_project_points(self, points: pd.DataFrame):
+        u_pro = []
+        v_pro = []
+        for row in points.itertuples():
+            x, y, z = row[3], row[4], row[5]
+            u_, v_ = self.perspective_project(x, y, z)
+            u_pro += [u_]
+            v_pro += [v_]
+
+        project_ = pd.DataFrame({"u": u_pro, "v": v_pro, "x": points["x"], "y": points["y"], "z": points["z"]})
+
+        # 画像点をintにキャスト
+        project_["u"] = project_["u"].astype(int)
+        project_["v"] = project_["v"].astype(int)
+
+        return project_
+
+
     # 校正点を再投影する
     def re_project(self):
         if self.__flatten_p is None or self.perspective_projection_matrix is None:
@@ -126,16 +145,16 @@ class Camera:
         reprojected_u = []
         reprojected_v = []
         # 再投影する
-        for row in self.point_for_calibration.itertuples():
+        for row in self.points_for_calibration.itertuples():
             u_, v_ = self.perspective_project(row[3], row[4], row[5])
             reprojected_u += [u_]
             reprojected_v += [v_]
 
         reprojected = pd.DataFrame({"u": reprojected_u,
                                     "v": reprojected_v,
-                                    "x": self.point_for_calibration["x"],
-                                    "y": self.point_for_calibration["y"],
-                                    "z": self.point_for_calibration["z"]})
+                                    "x": self.points_for_calibration["x"],
+                                    "y": self.points_for_calibration["y"],
+                                    "z": self.points_for_calibration["z"]})
 
         # 画像点をintにキャストする
         reprojected["u"] = reprojected["u"].astype(int)
@@ -146,7 +165,7 @@ class Camera:
     # 再投影誤差
     def re_projection_error(self):
         errors = []
-        for row_true, row_pred in zip(self.point_for_calibration.itertuples(), self.points_of_reprojection.itertuples()):
+        for row_true, row_pred in zip(self.points_for_calibration.itertuples(), self.points_of_reprojection.itertuples()):
             # 校正点と投影点の距離を求める
             error = np.sqrt((row_true[1] - row_pred[1]) ** 2 + (row_true[2] - row_pred[2]) ** 2)
             errors += [error]

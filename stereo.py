@@ -106,3 +106,7 @@ if __name__ == "__main__":
 
     c1.calibrate()
     c2.calibrate()
+
+    points12 = pd.read_csv("points/points_1_2.csv")
+    s = Stereo(c1, c2, points12)
+    s.obtain_objects_points_by_stereo()
