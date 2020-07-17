@@ -92,11 +92,17 @@ c2 = Camera(points2)
 c1.calibrate()
 c2.calibrate()
 
-# stereo view
+# Stereo view
 points12 = pd.read_csv("points1_2.csv")
 
 s = Stereo(c1, c2, points12)
 s.obtain_objects_points_by_stereo()
+    """
+    25.468530,16.458917,0.270884
+    24.743225,17.174606,0.214594
+    21.962353,20.021673,0.320999
+    ...
+    """
 ```
 
 ##### Format of `points1_2.csv`
