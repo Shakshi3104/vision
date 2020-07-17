@@ -59,6 +59,23 @@ c.fit()
 | 1593 | 1584 | 11.9 |  6.0 | 0.0 |
 | 2199 | 2059 | 17.9 | 18.0 | 0.0 |
 
+#### Projection
+
+```python
+x, y, z = 0.0, 11.1, 11.8
+u, v = c.prespective_project(x, y, z)
+    """
+    u = 2046.5960184435
+    v = 656.4871372556853
+    """
+```
+
+sklearn-like
+```python
+x, y, z = 0.0, 11.1, 11.8
+u, v = c.fit(x, y, z)  
+```
+
 #### Obtain 3D points from the perspective projection matrix of the calibrated camera
 
 ```python
@@ -92,23 +109,6 @@ s.obtain_objects_points_by_stereo()
 | 1899 | 2483 | 1522 | 2171 |
 | 1974 | 2453 | 1609 | 2155 |
 | 2258 | 2331 | 1937 | 2079 |
-
-#### Projection
-
-```python
-x, y, z = 0.0, 11.1, 11.8
-u, v = c.prespective_project(x, y, z)
-    """
-    u = 2046.5960184435
-    v = 656.4871372556853
-    """
-```
-
-sklearn-like
-```python
-x, y, z = 0.0, 11.1, 11.8
-u, v = c.fit(x, y, z)  
-```
 
 #### Plot calibration points
 ```python
