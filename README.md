@@ -59,6 +59,40 @@ c.fit()
 | 1593 | 1584 | 11.9 |  6.0 | 0.0 |
 | 2199 | 2059 | 17.9 | 18.0 | 0.0 |
 
+#### Obtain 3D points from the perspective projection matrix of the calibrated camera
+
+```python
+import pandas as pd
+from camera import Camera
+from stereo import Stereo
+
+# Calibrate camera
+points1 = pd.read_csv("points1.csv")
+points2 = pd.read_csv("points2.csv")
+
+c1 = Camera(points1)
+c2 = Camera(points2)
+c1.calibrate()
+c2.calibrate()
+
+# stereo view
+points12 = pd.read_csv("points1_2.csv")
+
+s = Stereo(c1, c2, points12)
+s.obtain_objects_points_by_stereo()
+```
+
+##### Format of `points1_2.csv`
+`u1` and `v1` are points of the image used for calibration of c1
+
+`u2` and `v2' are points of the image used for calibration of c2
+
+|  u1  |  v1  |  u2  |  v2  |
+|:----:|:----:|:----:|:----:|
+| 1899 | 2483 | 1522 | 2171 |
+| 1974 | 2453 | 1609 | 2155 |
+| 2258 | 2331 | 1937 | 2079 |
+
 #### Projection
 
 ```python
