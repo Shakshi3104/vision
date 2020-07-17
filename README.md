@@ -100,9 +100,9 @@ s.obtain_objects_points_by_stereo()
 ```
 
 ##### Format of `points1_2.csv`
-`u1` and `v1` are points of the image used for calibration of c1
+`u1` and `v1` are points on the image used for calibration of c1
 
-`u2` and `v2' are points of the image used for calibration of c2
+`u2` and `v2` are points on the image used for calibration of c2
 
 |  u1  |  v1  |  u2  |  v2  |
 |:----:|:----:|:----:|:----:|
