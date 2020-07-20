@@ -7,7 +7,7 @@ class Stereo:
     def __init__(self, camera1: Camera, camera2: Camera, points: pd.DataFrame):
         """
             Stereo:
-                Class to .
+                Class for stereo view from 2 calibrated cameras.
             :argument
                 camera1: camera.Camera, the calibrated camera with the image.
                 camera2: camera.Camera, the calibrated camera with the image (different image than camera1).
