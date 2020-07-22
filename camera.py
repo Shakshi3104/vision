@@ -135,7 +135,6 @@ class Camera:
 
         return project_
 
-
     # 校正点を再投影する
     def re_project(self):
         if self.__flatten_p is None or self.perspective_projection_matrix is None:
