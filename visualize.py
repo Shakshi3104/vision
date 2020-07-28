@@ -40,4 +40,3 @@ def plot_calibration_points(read_image_path: str, write_image_path: str, points:
 if __name__ == "__main__":
     points = pd.read_csv("points.csv")
     plot_calibration_points("sample/IMG_4047.JPG", "sample/IMG_4047_plotted.JPG", points)
-
