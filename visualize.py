@@ -1,4 +1,5 @@
 import cv2
+import seaborn as sns
 import pandas as pd
 
 
@@ -35,6 +36,104 @@ def plot_calibration_points(read_image_path: str, write_image_path: str, points:
         img = plot_calibration_point(img, row[1], row[2], str(row[0] + 1), radius, color)
 
     cv2.imwrite(write_image_path, img)
+
+
+# 3D 可視化に用いる
+class SeabornColorPalette:
+    palette_names = [
+        "viridis",
+        "plasma",
+        "inferno",
+        "magma",
+
+        "Greys",
+        "Purples",
+        "Blues",
+        "Greens",
+        "Oranges",
+        "Reds",
+        "YlOrBr",
+        "YlOrRd",
+        "OrRd",
+        "PuRd",
+        "RdPu",
+        "BuPu",
+        "GnBu",
+        "PuBu",
+        "YlGnBu",
+        "PuBuGn",
+        "BuGn",
+        "YlGn",
+
+        "binary",
+        "gist_yarg",
+        "gist_gray",
+        "gray",
+        "bone",
+        "pink",
+        "spring",
+        "summer",
+        "autumn",
+        "winter",
+        "cool",
+        "Wistia",
+        "hot",
+        "afmhot",
+        "gist_heat",
+        "copper",
+
+        "PiYG",
+        "PRGn",
+        "BrBG",
+        "PuOr",
+        "RdGy",
+        "RdBu",
+        "RdYlBu",
+        "RdYlGn",
+        "Spectral",
+        "coolwarm",
+        "bwr",
+        "seismic",
+
+        "Pastel1",
+        "Pastel2",
+        "Paired",
+        "Accent",
+        "Dark2",
+        "Set1",
+        "Set2",
+        "Set3",
+        "tab10",
+        "tab20",
+        "tab20b",
+        "tab20c",
+
+        "flag",
+        "prism",
+        "ocean",
+        "gist_earth",
+        "terrain",
+        "gist_stern",
+        "gnuplot",
+        "gnuplot2",
+        "CMRmap",
+        "cubehelix",
+        "brg",
+        "hsv",
+        "gist_rainbow",
+        "rainbow",
+        # "jet",
+        "nipy_spectral",
+        "gist_ncar"
+    ]
+
+
+    @classmethod
+    def to_plotly_rgb(cls, colorpalette, num_color):
+        palette = sns.color_palette(colorpalette, num_color)
+        rgb = ['rgb({},{},{})'.format(*[int(x * 256) for x in rgb])
+               for rgb in palette]
+        return rgb
 
 
 if __name__ == "__main__":
