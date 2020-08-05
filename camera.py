@@ -176,7 +176,7 @@ class Camera:
         self.calibrate(verbose)
 
     def predict(self, x, y, z):
-        self.predict(x, y, z)
+        self.perspective_project(x, y, z)
 
 
 if __name__ == "__main__":

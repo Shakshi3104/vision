@@ -73,7 +73,7 @@ u, v = c.prespective_project(x, y, z)
 sklearn-like
 ```python
 x, y, z = 0.0, 11.1, 11.8
-u, v = c.fit(x, y, z)  
+u, v = c.predict(x, y, z)  
 ```
 
 #### Obtain 3D points from the perspective projection matrix of the calibrated camera
